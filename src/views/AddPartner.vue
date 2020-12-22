@@ -12,6 +12,10 @@
         <v-container>
           <h2>Partner Search</h2>
           <p>Search for your partner by e-mail.</p>
+          <p>
+            Current partner: {{ currentPartnerName }} -
+            {{ currentPartnerEmail }}
+          </p>
           <v-row>
             <v-form ref="form" v-model="form">
               <v-col class="d-inline-flex">
@@ -67,7 +71,8 @@
         bottom
         right
         :color="toastColor"
-      >{{toastMessage}}</v-snackbar>
+        >{{ toastMessage }}</v-snackbar
+      >
     </v-container>
   </div>
 </template>
@@ -75,6 +80,9 @@
 <script>
 import { db } from "../main";
 export default {
+  created() {
+    this.getPartnerData();
+  },
   data: () => ({
     form: false,
     isLoading: false,
@@ -84,6 +92,8 @@ export default {
     email: "",
     foundUser: null,
     message: "",
+    currentPartnerName: "",
+    currentPartnerEmail: "",
     rules: {
       email: (v) => !!(v || "").match(/@/) || "Please enter a valid email.",
     },
@@ -110,25 +120,47 @@ export default {
       }
       this.isLoading = false;
     },
+
+    async getPartnerData() {
+      const self = this;
+      const authUserId = this.$store.state.user.id;
+      const ref = db.collection("users").doc(authUserId);
+      var getOptions = {
+        source: "server",
+      };
+      ref
+        .get(getOptions)
+        .then(async function (doc) {
+          var partnerId = doc.data().partnerId;
+          const snapshot = await db.collection("users").doc(partnerId).get();
+          self.currentPartnerName = snapshot.data().name;
+          self.currentPartnerEmail = snapshot.data().email;
+        })
+        .catch(function (error) {
+          console.log("Error getting cached document:", error);
+        });
+    },
+
     async addPartner(id) {
       try {
-          const authUserId = this.$store.state.user.id;
-          if(id == authUserId){
-                this.toastColor = 'red';
-                this.toastMessage = 'You can\'t add yourself as a partner.';
-                this.showToast = true;
-          }
-          else{
-          await db.collection('users').doc(authUserId).update({partnerId: id});
-          this.$store.dispatch('user/setPartnerId', id);
-          this.toastColor = 'success';
-          this.toastMessage = 'Partner added!';
+        const authUserId = this.$store.state.user.id;
+        if (id == authUserId) {
+          this.toastColor = "red";
+          this.toastMessage = "You can't add yourself as a partner.";
           this.showToast = true;
-          }
-
+        } else {
+          await db
+            .collection("users")
+            .doc(authUserId)
+            .update({ partnerId: id });
+          this.$store.dispatch("user/setPartnerId", id);
+          this.toastColor = "success";
+          this.toastMessage = "Partner added!";
+          this.showToast = true;
+        }
       } catch (error) {
-        this.toastColor = 'red';
-        this.toastMessage = 'Error when adding partner. Please try again.';
+        this.toastColor = "red";
+        this.toastMessage = "Error when adding partner. Please try again.";
         this.showToast = true;
       }
     },
