@@ -7,7 +7,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/home',
+    path: '/',
     name: 'Home',
     component: Home,
     beforeEnter: guard,
@@ -18,7 +18,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "sign-up" */ '../views/SignUp.vue')
   },
   {
-    path: '/',
+    path: '/login',
     name: 'Sign In',
     component: () => import(/* webpackChunkName: "sign-in" */ '../views/SignIn.vue')
   },
@@ -41,7 +41,7 @@ function guard(to, from, next){
     next();
   }
   else{
-    next('/');
+    next('/login');
   }
 }
 
