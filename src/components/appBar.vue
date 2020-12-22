@@ -16,7 +16,7 @@
 
       <v-btn v-if="userId" @click="logoutUser" text>Logout</v-btn>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" absolute bottom temporary>
+    <v-navigation-drawer app v-model="drawer" bottom temporary>
      <v-treeview :items="items" open-on-click item-key="name" activatable transition class="primary--text">
         <template slot="label" slot-scope="props">
           <div @click="redirect(props.item.href)">
