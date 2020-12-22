@@ -40,43 +40,60 @@ export default {
     drawer: false,
     items: [
       {
-        id: 0,
         name: "Home (All genres)",
         href: "/",
         icon: "mdi-home-outline",
       },
       {
-        id: 1,
         name: "Matches",
         href: "/matches",
         icon: "mdi-account-heart",
       },
       {
-        id: 2,
         name: "Add Partner",
         href: "/add-partner",
         icon: "mdi-account-plus",
       },
             {
-        id: 3,
         name: "Genres",
         icon: "mdi-movie",
          children: [
           {
-            id: 4,
-            name: "Sales",
-            href: "/sales"
+            name: "Comedy",
+            href: "/?genre=35"
+          },
+                    {
+            name: "Action",
+            href: "/?genre=28"
+          },
+                    {
+            name: "Crime",
+            href: "/?genre=80"
+          },
+                    {
+            name: "Documentary",
+            href: "/?genre=99"
+          },
+                    {
+            name: "Drama",
+            href: "/?genre=18"
+          },
+                    {
+            name: "History",
+            href: "/?genre=36"
           },
           {
-            id: 5,
-            name: "Orders",
-            href: "/orders"
+            name: "Horror",
+            href: "/?genre=27,37"
           },
           {
-            id: 6,
-            name: "Inventory",
-            href: "/inventory"
-          }
+            name: "Romance",
+            href: "/?genre=10749"
+          },
+                    {
+            name: "Sci-Fi",
+            href: "/?genre=878"
+          },
         ],
       },
     ],
@@ -88,7 +105,8 @@ export default {
       this.$router.replace("/login");
     },
     redirect(path){
-    this.$router.replace(path);
+    if(!path) return;
+    this.$router.replace(path).catch(()=>{});
   },
   },
   

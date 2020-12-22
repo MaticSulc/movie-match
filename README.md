@@ -24,6 +24,5 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 TODO:
-- keep track of movie ID's (array v database, ne pa da se shrani page!)
-- add functionality for subgenres
 - remove button (ne vem se za kaj)
+- list of liked/disliked movies

@@ -46,35 +46,62 @@ export default {
     movies: [],
     currentMovie: {},
     currentIndex: 0,
+    movieApiPage: 1,
   }),
   created(){
     this.$store.dispatch('user/bindMatchesRef');
     this.fetchMovies(this.movieApiPage);
   },
+  watch:{
+    $route (){
+        this.fetchMovies(this.page, this.$route.query.genre);
+    }
+},
 methods: {
-    async fetchMovies(page) {
+    async fetchMovies(page, genre = '') {
       const res = await axios.get(
-        `https://api.themoviedb.org/3/discover/movie?api_key=e38f8031ec37d0ebadd751afc38a138e&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=false&page=${page}`
+        `https://api.themoviedb.org/3/discover/movie?api_key=e38f8031ec37d0ebadd751afc38a138e&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=false&page=${page}&with_genres=${genre}`
       );
+                  
       if (res.data && res.data.results.length > 0) {
         this.movies = res.data.results;
-        this.currentMovie = this.movies[0];
+        this.currentIndex = -1;
+        this.incrementCurrentIndex();
       }
     },
     async incrementCurrentIndex() {
+      //check if it exists in liked/disliked, if it does increment by 1 (while s pogojem za to sranje za last entry v sebi)
+      let userRef = db.collection("users").doc(this.authUserId);
+
+      let likedMovies = await userRef.collection('likedMovies').get();
+      let dislikedMovies = await userRef.collection('dislikedMovies').get();
+      var likedMoviesArr = [];
+      var dislikedMoviesArr = [];
+      await likedMovies.forEach(async function(doc){
+        let movieId = await doc.data().id;
+        likedMoviesArr.push(movieId);
+      });
+      await dislikedMovies.forEach(async function(doc){
+        let movieId = await doc.data().id;
+        dislikedMoviesArr.push(movieId);
+      });
+    do{
       if (this.currentIndex === this.movieResultsLength - 1) {
         const newPage = this.movieApiPage += 1;
-        await db
-          .collection("users")
-          .doc(this.authUserId)
-          .update({ movieApiPage: newPage });
-        this.$store.dispatch("user/setMovieApiPage", newPage);
-        this.fetchMovies(newPage);
+                this.fetchMovies(newPage);
         this.currentIndex = 0;
-      } else {
+        this.currentMovie = this.movies[this.currentIndex];
+      } 
+      else {
         this.currentIndex++;
         this.currentMovie = this.movies[this.currentIndex];
       }
+      
+    }while(likedMoviesArr.includes(this.currentMovie.id) || dislikedMoviesArr.includes(this.currentMovie.id));
+
+      
+
+
     },
     async thumbsUp() {
       let userRef = db.collection("users").doc(this.authUserId);
@@ -95,15 +122,15 @@ methods: {
       this.incrementCurrentIndex();
     },
     async thumbsDown() {
-      await this.incrementCurrentIndex();
+      let userRef = db.collection("users").doc(this.authUserId);
+    
+      await userRef.collection("dislikedMovies").add({ ...this.currentMovie });
+      this.incrementCurrentIndex();
     },
   },
   computed: {
     movieResultsLength() {
       return this.movies.length;
-    },
-    movieApiPage() {
-      return this.$store.state.user.movieApiPage;
     },
     authUserId() {
       return this.$store.state.user.id;

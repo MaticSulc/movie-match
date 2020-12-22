@@ -8,7 +8,6 @@ const state = {
   name: null,
   email: null,
   partnerId: null,
-  movieApiPage: 1,
   matches: [],
 };
 
@@ -31,9 +30,6 @@ const mutations = {
   SET_PARTNER_ID: (state, payload) => {
       state.partnerId = payload;
   },
-  SET_MOVIE_API_PAGE: (state, payload) => {
-    state.movieApiPage = payload;
-  }
 };
 
 const actions = {
@@ -45,9 +41,6 @@ const actions = {
   },
   setPartnerId(context, id){
       context.commit('SET_PARTNER_ID', id);
-  },
-  setMovieApiPage(context,pageNumber){
-    context.commit('SET_MOVIE_API_PAGE', pageNumber);
   },
   bindMatchesRef: firestoreAction((context => {
     return context.bindFirestoreRef('matches', db.collection('users').doc(context.state.id).collection('matches'));
