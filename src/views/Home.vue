@@ -63,6 +63,7 @@ export default {
   created() {
     this.$store.dispatch("user/bindMatchesRef");
     this.fetchMovies(this.movieApiPage);
+    this.movieApiPage = 1;
   },
   watch: {
     $route() {
