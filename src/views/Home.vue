@@ -4,11 +4,11 @@
       <template slot="progress">
         <v-progress-linear
           color="primary"
-          height="10"
+          size="20"
           indeterminate
         ></v-progress-linear>
       </template>
-      <v-row>
+      <v-row v-if="!isLoading">
         <v-col md="6">
           <v-img :src="movieImage"></v-img>
         </v-col>
@@ -61,31 +61,60 @@ export default {
     movieApiPage: 1,
   }),
   created() {
-    this.$store.dispatch("user/bindMatchesRef");
-    this.fetchMovies(this.movieApiPage);
     this.movieApiPage = 1;
+    this.$store.dispatch("user/bindMatchesRef");
+    if (this.$route.query.genre) {
+      this.fetchMovies(this.movieApiPage, this.$route.query.genre);
+    } else {
+      this.fetchMovies(this.movieApiPage);
+    }
   },
   watch: {
     $route() {
-      this.fetchMovies(this.page, this.$route.query.genre);
+      this.movieApiPage = 1;
+      this.fetchMovies(this.movieApiPage, this.$route.query.genre);
     },
   },
   methods: {
     async fetchMovies(page, genre = "") {
+      console.log("fetchMovies " + this.isLoading);
+      this.isLoading = true;
       const res = await axios.get(
         `https://api.themoviedb.org/3/discover/movie?api_key=e38f8031ec37d0ebadd751afc38a138e&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=false&page=${page}&with_genres=${genre}&append_to_response=videos`
       );
 
       if (res.data && res.data.results.length > 0) {
+        let userRef = db.collection("users").doc(this.authUserId);
+        let likedMovies = await userRef.collection("likedMovies").get();
+        let dislikedMovies = await userRef.collection("dislikedMovies").get();
+        var likedMoviesArr = [];
+        var dislikedMoviesArr = [];
+        await likedMovies.forEach(async function (doc) {
+          let movieId = await doc.data().id;
+          likedMoviesArr.push(movieId);
+        });
+        await dislikedMovies.forEach(async function (doc) {
+          let movieId = await doc.data().id;
+          dislikedMoviesArr.push(movieId);
+        });
+
         this.movies = res.data.results;
         this.currentIndex = 0;
-        this.incrementCurrentIndex();
+        if (
+          likedMoviesArr.includes(this.movies[this.currentIndex].id) ||
+          dislikedMoviesArr.includes(this.movies[this.currentIndex].id)
+        ) {
+          this.isLoading = true;
+          await this.incrementCurrentIndex();
+        } else {
+          this.currentMovie = this.movies[this.currentIndex];
+          this.isLoading = false;
+        }
       }
     },
     async incrementCurrentIndex() {
-      //check if it exists in liked/disliked, if it does increment by 1 (while s pogojem za to sranje za last entry v sebi)
+      this.isLoading = true;
       let userRef = db.collection("users").doc(this.authUserId);
-
       let likedMovies = await userRef.collection("likedMovies").get();
       let dislikedMovies = await userRef.collection("dislikedMovies").get();
       var likedMoviesArr = [];
@@ -99,19 +128,20 @@ export default {
         dislikedMoviesArr.push(movieId);
       });
       do {
+        this.isLoading = true;
+
         if (this.currentIndex === this.movieResultsLength - 1) {
-          const newPage = (this.movieApiPage += 1);
-          this.fetchMovies(newPage);
-          this.currentIndex = 0;
-          this.currentMovie = this.movies[this.currentIndex];
+          const newPage = await (this.movieApiPage += 1);
+          await this.fetchMovies(newPage);
         } else {
-          this.currentIndex++;
-          this.currentMovie = this.movies[this.currentIndex];
+          await this.currentIndex++;
         }
+        this.currentMovie = await this.movies[this.currentIndex];
       } while (
-        likedMoviesArr.includes(this.currentMovie.id) ||
-        dislikedMoviesArr.includes(this.currentMovie.id)
+        (await likedMoviesArr.includes(this.currentMovie.id)) ||
+        (await dislikedMoviesArr.includes(this.currentMovie.id))
       );
+      this.isLoading = false;
     },
     async thumbsUp() {
       let userRef = db.collection("users").doc(this.authUserId);

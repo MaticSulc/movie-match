@@ -46,6 +46,12 @@ const routes = [
     beforeEnter: guard,
     component: () => import(/* webpackChunkName: "disliked-movies" */ '../views/dislikedMovies.vue')
   },
+  {
+    path: '/settings',
+    name: 'Settings',
+    beforeEnter: guard,
+    component: () => import(/* webpackChunkName: "settings" */ '../views/Settings.vue')
+  },
 ]
 
 function guard(to, from, next){
