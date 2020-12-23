@@ -34,6 +34,18 @@ const routes = [
     beforeEnter: guard,
     component: () => import(/* webpackChunkName: "matches" */ '../views/Matches.vue')
   },
+  {
+    path: '/liked-movies',
+    name: 'Liked Movies',
+    beforeEnter: guard,
+    component: () => import(/* webpackChunkName: "liked-movies" */ '../views/likedMovies.vue')
+  },
+  {
+    path: '/disliked-movies',
+    name: 'Disliked Movies',
+    beforeEnter: guard,
+    component: () => import(/* webpackChunkName: "disliked-movies" */ '../views/dislikedMovies.vue')
+  },
 ]
 
 function guard(to, from, next){

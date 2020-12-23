@@ -60,6 +60,17 @@ export default {
         href: "/add-partner",
         icon: "mdi-account-plus",
       },
+      {
+        name: "Liked movies",
+        href: "/liked-movies",
+        icon: "mdi-heart",
+      },
+            {
+        name: "Disliked movies",
+        href: "/disliked-movies",
+        icon: "mdi-close-thick",
+      },
+        
             {
         name: "Genres",
         icon: "mdi-movie",
