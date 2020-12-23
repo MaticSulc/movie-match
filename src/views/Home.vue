@@ -18,10 +18,10 @@
               <v-card-actions>
                 <v-row class="d-flex justify-space-around">
                   <v-btn color="green" @click="thumbsUp">
-                    <v-icon>mdi-thumb-up</v-icon>
+                    <v-icon>mdi-heart</v-icon>
                   </v-btn>
                   <v-btn color="red" @click="thumbsDown">
-                    <v-icon>mdi-thumb-down</v-icon>
+                    <v-icon>mdi-close-thick</v-icon>
                   </v-btn>
                 </v-row>
               </v-card-actions>

@@ -16,17 +16,23 @@
 
       <v-btn v-if="userId" @click="logoutUser" text>Logout</v-btn>
     </v-app-bar>
-    <v-navigation-drawer app v-model="drawer" bottom temporary>
+    <v-navigation-drawer app v-model="drawer" bottom temporary >
+      <v-list-item nav>
+
+        <v-list-item-content style="text-align:center;">
+          <span><br/></span>
+        </v-list-item-content>
+      </v-list-item>
      <v-treeview :items="items" open-on-click item-key="name" activatable transition class="primary--text">
         <template slot="label" slot-scope="props">
           <div @click="redirect(props.item.href)">
-          <v-icon color="primary" v-text="props.item.icon" class="pr-2"></v-icon>
+          <v-icon color="primary" v-text="props.item.icon" class="pr-2" ></v-icon>
           <router-link
-            style="text-decoration: none"
+            style="text-decoration: none;color:#424242;"
             :to="props.item.href"
             v-if="props.item.href"
           >{{ props.item.name }}</router-link>
-          <span v-else>{{ props.item.name }}</span>
+          <span style="color:#424242;" v-else>{{ props.item.name }}</span>
           </div>
         </template>
       </v-treeview>
