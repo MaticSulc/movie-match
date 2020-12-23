@@ -24,5 +24,4 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 TODO:
-- remove button (ne vem se za kaj)
-- list of liked/disliked movies
+- settings page (reset all personal data, change name, change email, change password)

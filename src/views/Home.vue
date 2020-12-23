@@ -72,12 +72,12 @@ export default {
   methods: {
     async fetchMovies(page, genre = "") {
       const res = await axios.get(
-        `https://api.themoviedb.org/3/discover/movie?api_key=e38f8031ec37d0ebadd751afc38a138e&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=false&page=${page}&with_genres=${genre}`
+        `https://api.themoviedb.org/3/discover/movie?api_key=e38f8031ec37d0ebadd751afc38a138e&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=false&page=${page}&with_genres=${genre}&append_to_response=videos`
       );
 
       if (res.data && res.data.results.length > 0) {
         this.movies = res.data.results;
-        this.currentIndex = -1;
+        this.currentIndex = 0;
         this.incrementCurrentIndex();
       }
     },
