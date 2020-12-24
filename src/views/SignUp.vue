@@ -23,7 +23,7 @@
         v-model="password"
         :rules="[rules.password, rules.length(7)]"
         filled
-        counter='6'
+        counter="6"
         label="Password"
         type="password"
         style="min-height: 96px"
@@ -50,8 +50,8 @@
 </template>
 
 <script>
-import firebase from 'firebase';
-import {db} from '../main'
+import firebase from "firebase";
+import { db } from "../main";
 export default {
   data: () => ({
     name: "",
@@ -61,41 +61,48 @@ export default {
     form: false,
     isLoading: false,
     rules: {
-      email: (v) => !!(v || "").match(/@/) || "Please enter a valid email.",
-      length: (len) => (v) =>
+      email: v => !!(v || "").match(/@/) || "Please enter a valid email.",
+      length: len => v =>
         (v || "").length >= len || `Invalid length, requires ${len}.`,
-      password: (v) =>
+      password: v =>
         !!(v || "").match(
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/
         ) ||
         "Password must contain uppercase, lowercase, number and special character.",
-      required: (v) => !!v || "This field is required.",
-    },
+      required: v => !!v || "This field is required."
+    }
   }),
   methods: {
     async signUp() {
-        this.isLoading = true;
-        try {
-            let authRes = await firebase.auth().createUserWithEmailAndPassword(this.email.toLowerCase(), this.password);
+      this.isLoading = true;
+      try {
+        let authRes = await firebase
+          .auth()
+          .createUserWithEmailAndPassword(
+            this.email.toLowerCase(),
+            this.password
+          );
 
-            await db.collection("users").doc(authRes.user.uid).set({name: this.name, email: this.email.toLowerCase()});
-            this.$store.dispatch('user/setUserData', {
-                id: authRes.user.uid,
-                name: this.name,
-                email: this.email.toLowerCase(),
-                partnerId: '',
-            })
+        await db
+          .collection("users")
+          .doc(authRes.user.uid)
+          .set({ name: this.name, email: this.email.toLowerCase() });
+        this.$store.dispatch("user/setUserData", {
+          id: authRes.user.uid,
+          name: this.name,
+          email: this.email.toLowerCase(),
+          partnerId: ""
+        });
 
-            this.$router.replace({ name: "Home" });
-
-        } catch (error) {
-            this.errorMsg = 'An error has occured!';
-            if(error.message){
-                this.errorMsg = error.message;
-            }
+        this.$router.replace({ name: "Home" });
+      } catch (error) {
+        this.errorMsg = "An error has occured!";
+        if (error.message) {
+          this.errorMsg = error.message;
         }
-        this.isLoading = false;
-    },
-  },
+      }
+      this.isLoading = false;
+    }
+  }
 };
 </script>

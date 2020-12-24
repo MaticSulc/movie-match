@@ -16,23 +16,36 @@
 
       <v-btn v-if="userId" @click="logoutUser" text>Logout</v-btn>
     </v-app-bar>
-    <v-navigation-drawer app v-model="drawer" bottom temporary color="secondary">
+    <v-navigation-drawer
+      app
+      v-model="drawer"
+      bottom
+      temporary
+      color="secondary"
+    >
       <v-list-item nav>
-
-        <v-list-item-content style="text-align:center;">
-          <span><br/></span>
+        <v-list-item-content style="text-align: center">
+          <span><br /></span>
         </v-list-item-content>
       </v-list-item>
-     <v-treeview :items="items" open-on-click item-key="name" activatable transition class="primary--text">
+      <v-treeview
+        :items="items"
+        open-on-click
+        item-key="name"
+        activatable
+        transition
+        class="primary--text"
+      >
         <template slot="label" slot-scope="props">
           <div @click="redirect(props.item.href)">
-          <v-icon color="red" v-text="props.item.icon" class="pr-2" ></v-icon>
-          <router-link
-            style="text-decoration: none;color:#fff;"
-            :to="props.item.href"
-            v-if="props.item.href"
-          >{{ props.item.name }}</router-link>
-          <span style="color:#fff;" v-else>{{ props.item.name }}</span>
+            <v-icon color="red" v-text="props.item.icon" class="pr-2"></v-icon>
+            <router-link
+              style="text-decoration: none; color: #fff"
+              :to="props.item.href"
+              v-if="props.item.href"
+              >{{ props.item.name }}</router-link
+            >
+            <span style="color: #fff" v-else>{{ props.item.name }}</span>
           </div>
         </template>
       </v-treeview>
@@ -48,54 +61,54 @@ export default {
       {
         name: "Home (All genres)",
         href: "/",
-        icon: "mdi-home-outline",
+        icon: "mdi-home-outline"
       },
       {
         name: "Matches",
         href: "/matches",
-        icon: "mdi-account-heart",
+        icon: "mdi-account-heart"
       },
       {
         name: "Add Partner",
         href: "/add-partner",
-        icon: "mdi-account-plus",
+        icon: "mdi-account-plus"
       },
       {
         name: "Liked movies",
         href: "/liked-movies",
-        icon: "mdi-heart",
+        icon: "mdi-heart"
       },
-            {
+      {
         name: "Disliked movies",
         href: "/disliked-movies",
-        icon: "mdi-close-thick",
+        icon: "mdi-close-thick"
       },
-        
-            {
+
+      {
         name: "Genres",
         icon: "mdi-movie",
-         children: [
+        children: [
           {
             name: "Comedy",
             href: "/?genre=35"
           },
-                    {
+          {
             name: "Action",
             href: "/?genre=28"
           },
-                    {
+          {
             name: "Crime",
             href: "/?genre=80"
           },
-                    {
+          {
             name: "Documentary",
             href: "/?genre=99"
           },
-                    {
+          {
             name: "Drama",
             href: "/?genre=18"
           },
-                    {
+          {
             name: "History",
             href: "/?genre=36"
           },
@@ -107,18 +120,18 @@ export default {
             name: "Romance",
             href: "/?genre=10749"
           },
-                    {
+          {
             name: "Sci-Fi",
             href: "/?genre=878"
-          },
-        ],
+          }
+        ]
       },
       {
         name: "Settings",
         href: "/settings",
-        icon: "mdi-cog",
-      },
-    ],
+        icon: "mdi-cog"
+      }
+    ]
   }),
   methods: {
     async logoutUser() {
@@ -126,16 +139,16 @@ export default {
       this.$store.dispatch("user/clearUserData");
       this.$router.replace("/login");
     },
-    redirect(path){
-    if(!path) return;
-    this.$router.replace(path).catch(()=>{});
+    redirect(path) {
+      if (!path) return;
+      this.$router.replace(path).catch(() => {});
+    }
   },
-  },
-  
+
   computed: {
     userId() {
       return this.$store.state.user.id;
-    },
-  },
+    }
+  }
 };
 </script>

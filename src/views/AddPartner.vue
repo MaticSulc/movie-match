@@ -95,8 +95,8 @@ export default {
     currentPartnerName: "",
     currentPartnerEmail: "",
     rules: {
-      email: (v) => !!(v || "").match(/@/) || "Please enter a valid email.",
-    },
+      email: v => !!(v || "").match(/@/) || "Please enter a valid email."
+    }
   }),
   methods: {
     async searchPartner() {
@@ -113,7 +113,7 @@ export default {
         const userData = snapshot.docs[0].data();
         this.foundUser = {
           id: userId,
-          ...userData,
+          ...userData
         };
       } else {
         this.message = "No user found!";
@@ -126,17 +126,20 @@ export default {
       const authUserId = this.$store.state.user.id;
       const ref = db.collection("users").doc(authUserId);
       var getOptions = {
-        source: "server",
+        source: "server"
       };
       ref
         .get(getOptions)
-        .then(async function (doc) {
+        .then(async function(doc) {
           var partnerId = doc.data().partnerId;
-          const snapshot = await db.collection("users").doc(partnerId).get();
+          const snapshot = await db
+            .collection("users")
+            .doc(partnerId)
+            .get();
           self.currentPartnerName = snapshot.data().name;
           self.currentPartnerEmail = snapshot.data().email;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.log("Error getting cached document:", error);
         });
     },
@@ -163,7 +166,7 @@ export default {
         this.toastMessage = "Error when adding partner. Please try again.";
         this.showToast = true;
       }
-    },
-  },
+    }
+  }
 };
 </script>

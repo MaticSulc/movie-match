@@ -55,7 +55,6 @@
   </v-container>
 </template>
 
-
 <script>
 import firebase from "firebase";
 import { db } from "../main";
@@ -71,8 +70,8 @@ export default {
     toastMessage: "",
     toastColor: "",
     rules: {
-      required: (v) => !!v || "This field is required.",
-    },
+      required: v => !!v || "This field is required."
+    }
   }),
   methods: {
     async resetPassword() {
@@ -81,18 +80,18 @@ export default {
       let email = this.email;
       auth
         .sendPasswordResetEmail(email)
-        .then(function () {
+        .then(function() {
           that.showToast = true;
           that.toastMessage = "Password reset email has been sent.";
           that.toastColor = "green";
-          that.email = '';
-          that.password = '';
+          that.email = "";
+          that.password = "";
         })
-        .catch(function (err) {
+        .catch(function(err) {
           that.showToast = true;
           that.toastMessage = err;
           that.toastColor = "red";
-          that.password = '';
+          that.password = "";
         });
     },
     async signIn() {
@@ -102,7 +101,10 @@ export default {
           .auth()
           .signInWithEmailAndPassword(this.email.toLowerCase(), this.password);
 
-        const dbUser = await db.collection("users").doc(authRes.user.uid).get();
+        const dbUser = await db
+          .collection("users")
+          .doc(authRes.user.uid)
+          .get();
 
         const userData = dbUser.data();
         this.$store.dispatch("user/setUserData", {
@@ -110,7 +112,7 @@ export default {
           name: userData.name,
           email: userData.email,
           partnerId: userData.partnerId || "",
-          movieApiPage: userData.movieApiPage || 1,
+          movieApiPage: userData.movieApiPage || 1
         });
 
         this.$router.replace({ name: "Home" });
@@ -121,7 +123,7 @@ export default {
         }
       }
       this.isLoading = false;
-    },
-  },
+    }
+  }
 };
 </script>

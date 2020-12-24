@@ -1,5 +1,5 @@
-import {firestoreAction} from 'vuexfire'
-import {db} from '../../main'
+import { firestoreAction } from "vuexfire";
+import { db } from "../../main";
 
 const namespaced = true;
 
@@ -8,7 +8,7 @@ const state = {
   name: null,
   email: null,
   partnerId: null,
-  matches: [],
+  matches: []
 };
 
 const mutations = {
@@ -19,7 +19,7 @@ const mutations = {
     state.partnerId = payload.partnerId;
     state.movieApiPage = payload.movieApiPage;
   },
-  CLEAR_USER_DATA: (state) => {
+  CLEAR_USER_DATA: state => {
     state.id = null;
     state.name = null;
     state.email = null;
@@ -28,33 +28,37 @@ const mutations = {
     state.matches = [];
   },
   SET_PARTNER_ID: (state, payload) => {
-      state.partnerId = payload;
-  },
+    state.partnerId = payload;
+  }
 };
 
 const actions = {
   setUserData(context, userData) {
-    context.commit('SET_USER_DATA', userData);
+    context.commit("SET_USER_DATA", userData);
   },
   clearUserData(context, userData) {
-    context.commit('CLEAR_USER_DATA', userData);
+    context.commit("CLEAR_USER_DATA", userData);
   },
-  setPartnerId(context, id){
-      context.commit('SET_PARTNER_ID', id);
+  setPartnerId(context, id) {
+    context.commit("SET_PARTNER_ID", id);
   },
-  bindMatchesRef: firestoreAction((context => {
-    return context.bindFirestoreRef('matches', db.collection('users').doc(context.state.id).collection('matches'));
-  }))
+  bindMatchesRef: firestoreAction(context => {
+    return context.bindFirestoreRef(
+      "matches",
+      db
+        .collection("users")
+        .doc(context.state.id)
+        .collection("matches")
+    );
+  })
 };
 
-const getters = {
-
-};
+const getters = {};
 
 export default {
   namespaced,
   state,
   mutations,
   actions,
-  getters,
+  getters
 };

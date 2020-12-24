@@ -120,24 +120,24 @@ export default {
     username: "",
     email: "",
     rules: {
-      email: (v) => !!(v || "").match(/@/) || "Please enter a valid email.",
-    },
+      email: v => !!(v || "").match(/@/) || "Please enter a valid email."
+    }
   }),
   methods: {
     async clearLikedMovies() {
       let userRef = db.collection("users").doc(this.authUserId);
       let likedMovies = await userRef.collection("likedMovies").get();
       var likedMoviesArr = [];
-      await likedMovies.forEach(async function (doc) {
+      await likedMovies.forEach(async function(doc) {
         let movieData = await doc.data();
         likedMoviesArr.push(movieData.id);
       });
-      likedMoviesArr.forEach(async (id) => {
+      likedMoviesArr.forEach(async id => {
         const doc = await userRef
           .collection("likedMovies")
           .where("id", "==", id)
           .get();
-        doc.forEach((el) => {
+        doc.forEach(el => {
           el.ref.delete();
         });
       });
@@ -149,16 +149,16 @@ export default {
       let userRef = db.collection("users").doc(this.authUserId);
       let dislikedMovies = await userRef.collection("dislikedMovies").get();
       var dislikedMoviesArr = [];
-      await dislikedMovies.forEach(async function (doc) {
+      await dislikedMovies.forEach(async function(doc) {
         let movieData = await doc.data();
         dislikedMoviesArr.push(movieData.id);
       });
-      dislikedMoviesArr.forEach(async (id) => {
+      dislikedMoviesArr.forEach(async id => {
         const doc = await userRef
           .collection("dislikedMovies")
           .where("id", "==", id)
           .get();
-        doc.forEach((el) => {
+        doc.forEach(el => {
           el.ref.delete();
         });
       });
@@ -170,16 +170,16 @@ export default {
       let userRef = db.collection("users").doc(this.authUserId);
       let matches = await userRef.collection("matches").get();
       var matchesArr = [];
-      await matches.forEach(async function (doc) {
+      await matches.forEach(async function(doc) {
         let movieData = await doc.data();
         matchesArr.push(movieData.id);
       });
-      matchesArr.forEach(async (id) => {
+      matchesArr.forEach(async id => {
         const doc = await userRef
           .collection("matches")
           .where("id", "==", id)
           .get();
-        doc.forEach((el) => {
+        doc.forEach(el => {
           el.ref.delete();
         });
       });
@@ -187,10 +187,10 @@ export default {
       this.toastMessage = "Matches cleared.";
       this.showToast = true;
     },
-    async clearAllData(){
-        await this.clearLikedMovies();
-        await this.clearDislikedMovies();
-        await this.clearMatches();
+    async clearAllData() {
+      await this.clearLikedMovies();
+      await this.clearDislikedMovies();
+      await this.clearMatches();
     },
     async updateUserData() {
       const authUserId = this.$store.state.user.id;
@@ -202,7 +202,7 @@ export default {
           (this.toastMessage = "User settings updated."),
           (this.showToast = true)
         )
-        .catch(function (error) {
+        .catch(function(error) {
           console.log("Error getting cached document:", error);
         });
     },
@@ -212,23 +212,23 @@ export default {
       const authUserId = this.$store.state.user.id;
       const ref = db.collection("users").doc(authUserId);
       var getOptions = {
-        source: "server",
+        source: "server"
       };
       ref
         .get(getOptions)
-        .then(async function (doc) {
+        .then(async function(doc) {
           self.username = doc.data().name;
           self.email = doc.data().email;
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.log("Error getting cached document:", error);
         });
-    },
+    }
   },
   computed: {
     authUserId() {
       return this.$store.state.user.id;
-    },
-  },
+    }
+  }
 };
 </script>

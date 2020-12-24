@@ -1,25 +1,23 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import VuexPersist from 'vuex-persist'
-import user from './modules/user'
-import {vuexfireMutations} from "vuexfire"
+import Vue from "vue";
+import Vuex from "vuex";
+import VuexPersist from "vuex-persist";
+import user from "./modules/user";
+import { vuexfireMutations } from "vuexfire";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 const vuexLocal = new VuexPersist({
   storage: window.localStorage
-})
+});
 
 export default new Vuex.Store({
-  state: {
-  },
+  state: {},
   mutations: {
-    ...vuexfireMutations,
+    ...vuexfireMutations
   },
-  actions: {
-  },
+  actions: {},
   modules: {
-    user,
+    user
   },
-  plugins: [vuexLocal.plugin],
-})
+  plugins: [vuexLocal.plugin]
+});

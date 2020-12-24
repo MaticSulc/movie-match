@@ -84,7 +84,7 @@ export default {
     movieApiPage: 1,
     trailerUrl: "",
     rating: 0,
-    backdrop: "",
+    backdrop: ""
   }),
   created() {
     this.movieApiPage = 1;
@@ -102,7 +102,7 @@ export default {
     $route() {
       this.movieApiPage = 1;
       this.fetchMovies(this.movieApiPage, this.$route.query.genre);
-    },
+    }
   },
   methods: {
     async fetchMovies(page, genre = "") {
@@ -118,11 +118,11 @@ export default {
         let dislikedMovies = await userRef.collection("dislikedMovies").get();
         var likedMoviesArr = [];
         var dislikedMoviesArr = [];
-        await likedMovies.forEach(async function (doc) {
+        await likedMovies.forEach(async function(doc) {
           let movieId = await doc.data().id;
           likedMoviesArr.push(movieId);
         });
-        await dislikedMovies.forEach(async function (doc) {
+        await dislikedMovies.forEach(async function(doc) {
           let movieId = await doc.data().id;
           dislikedMoviesArr.push(movieId);
         });
@@ -148,11 +148,11 @@ export default {
       let dislikedMovies = await userRef.collection("dislikedMovies").get();
       var likedMoviesArr = [];
       var dislikedMoviesArr = [];
-      await likedMovies.forEach(async function (doc) {
+      await likedMovies.forEach(async function(doc) {
         let movieId = await doc.data().id;
         likedMoviesArr.push(movieId);
       });
-      await dislikedMovies.forEach(async function (doc) {
+      await dislikedMovies.forEach(async function(doc) {
         let movieId = await doc.data().id;
         dislikedMoviesArr.push(movieId);
       });
@@ -204,7 +204,7 @@ export default {
       this.rating = rating / 2;
       this.backdrop =
         "https://image.tmdb.org/t/p/w500/" + this.currentMovie.backdrop_path;
-    },
+    }
   },
   computed: {
     movieResultsLength() {
@@ -220,8 +220,7 @@ export default {
       return this.currentMovie.poster_path
         ? `https://image.tmdb.org/t/p/w500/${this.currentMovie.poster_path}`
         : "";
-    },
-  },
+    }
+  }
 };
 </script>
-
