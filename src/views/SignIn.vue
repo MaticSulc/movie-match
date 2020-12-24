@@ -25,9 +25,11 @@
           @keyup.enter="signIn"
         ></v-text-field>
       </v-form>
+      
       <v-alert v-if="errorMsg" border="top" color="red" class="ml-5 mr-5">
         {{ errorMsg }}
       </v-alert>
+      
       <v-divider></v-divider>
       <v-card-actions>
         <v-btn text to="/sign-up">Sign Up</v-btn>
@@ -36,7 +38,7 @@
         <v-btn
           :disabled="!form"
           color="primary"
-          :loadding="isLoading"
+          :loading="isLoading"
           depressed
           @click="signIn"
           >Sign In</v-btn
