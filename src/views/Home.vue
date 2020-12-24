@@ -3,7 +3,7 @@
     <v-card
       :loading="isLoading"
       class="mx-auto my-12"
-      max-width="800"
+      max-width="1000"
       style="background-color: #BEBEBE"
     >
       <template slot="progress">
@@ -59,8 +59,8 @@
           </v-card-actions>
           <youtube
             class="ml-5 mt-3 mb-3"
-            :player-width="350"
-            :player-height="200"
+            :player-width="490"
+            :player-height="300"
             :video-id="trailerUrl"
           ></youtube>
         </v-col>

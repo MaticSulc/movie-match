@@ -61,7 +61,7 @@ export default {
       {
         name: "Home (All genres)",
         href: "/",
-        icon: "mdi-home-outline",
+        icon: "mdi-home",
       },
       {
         name: "Matches",
