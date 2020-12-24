@@ -19,7 +19,7 @@ import AppBar from "./components/appBar";
 export default {
   name: "App",
   created() {
-    document.title = "Movie Match";
+    document.title = "Movie Match ";
   },
 
   components: {
