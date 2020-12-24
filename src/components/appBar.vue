@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app-bar app color="secondary" dark>
+    <v-app-bar app color="#282828" dark>
       <v-app-bar-nav-icon
         @click="drawer = !drawer"
         v-if="userId"

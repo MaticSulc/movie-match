@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
 import firebase from 'firebase';
-
+import VueYouTubeEmbed from 'vue-youtube-embed'
 
 Vue.config.productionTip = false
 
@@ -31,3 +31,4 @@ new Vue({
   vuetify,
   render: h => h(App)
 }).$mount('#app')
+Vue.use(VueYouTubeEmbed)

@@ -1,6 +1,11 @@
 <template>
   <div class="home">
-    <v-card :loading="isLoading" class="mx-auto my-12" max-width="600">
+    <v-card
+      :loading="isLoading"
+      class="mx-auto my-12"
+      max-width="800"
+      style="background-color: #BEBEBE"
+    >
       <template slot="progress">
         <v-progress-linear
           color="primary"
@@ -9,14 +14,27 @@
         ></v-progress-linear>
       </template>
       <v-row v-if="!isLoading">
-        <v-col md="6">
-          <v-img :src="movieImage"></v-img>
+        <v-col md="5" class="ml-3">
+          <v-img style="height: 100%" :src="movieImage"></v-img>
         </v-col>
-        <v-col md="6" class="mt-5">
-          <v-card-title>{{ currentMovie.title }}</v-card-title>
+        <v-col md="6" class="">
+          <v-card-title class="mb-n5"
+            >{{ currentMovie.title }} ({{
+              currentMovie.release_date.split("-")[0]
+            }})</v-card-title
+          >
+          <v-rating
+            class="pl-2"
+            v-model="rating"
+            background-color="gray lighten-2"
+            color="gray lighten-2"
+            size="30"
+            half-increments
+            readonly
+          ></v-rating>
           <v-card-text>
             <v-row align="center" class="mx-0">
-              <div>{{ currentMovie.overview }}</div>
+              <div class="text-justify">{{ currentMovie.overview }}</div>
             </v-row>
           </v-card-text>
           <v-card-actions>
@@ -39,18 +57,23 @@
               </v-tooltip>
             </v-row>
           </v-card-actions>
+          <youtube
+            class="ml-5 mt-3 mb-3"
+            :player-width="350"
+            :player-height="200"
+            :video-id="trailerUrl"
+          ></youtube>
         </v-col>
       </v-row>
     </v-card>
-    <v-row>
-      <v-col class="text-center"> &copy; Matic Šulc </v-col>
-    </v-row>
   </div>
 </template>
 
 <script>
 import { db } from "../main";
 import axios from "axios";
+import { getIdFromURL } from "vue-youtube-embed";
+const movieTrailer = require("movie-trailer");
 export default {
   name: "Home",
   data: () => ({
@@ -59,6 +82,9 @@ export default {
     currentMovie: {},
     currentIndex: 0,
     movieApiPage: 1,
+    trailerUrl: "",
+    rating: 0,
+    backdrop: "",
   }),
   created() {
     this.movieApiPage = 1;
@@ -68,6 +94,9 @@ export default {
     } else {
       this.fetchMovies(this.movieApiPage);
     }
+  },
+  updated() {
+    this.getTrailerUrlRating();
   },
   watch: {
     $route() {
@@ -166,6 +195,15 @@ export default {
 
       await userRef.collection("dislikedMovies").add({ ...this.currentMovie });
       this.incrementCurrentIndex();
+    },
+    async getTrailerUrlRating() {
+      let url = movieTrailer(this.currentMovie.title);
+      let id = getIdFromURL(await url);
+      this.trailerUrl = id;
+      let rating = this.currentMovie.vote_average;
+      this.rating = rating / 2;
+      this.backdrop =
+        "https://image.tmdb.org/t/p/w500/" + this.currentMovie.backdrop_path;
     },
   },
   computed: {

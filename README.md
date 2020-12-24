@@ -24,4 +24,5 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 TODO:
-- settings page (reset all personal data, change name, change email, change password)
+- password reset next to login
+

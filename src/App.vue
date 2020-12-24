@@ -1,7 +1,14 @@
 <template>
   <v-app>
     <AppBar />
-    <v-main>
+    <v-main
+      :style="{
+        backgroundImage: 'url(' + require('@/assets/bg_light.png') + ')',
+        backgroundSize: 'cover',
+        backgroundColor: '#282828	',
+        backgroundPosition: 'center',
+      }"
+    >
       <router-view></router-view>
     </v-main>
   </v-app>
