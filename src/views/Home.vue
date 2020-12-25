@@ -96,6 +96,7 @@ export default {
     }
   },
   updated() {
+    this.syncMatches();
     this.getTrailerUrlRating();
   },
   watch: {
@@ -105,6 +106,67 @@ export default {
     }
   },
   methods: {
+    async syncMatches(){
+      let userRef = db.collection("users").doc(this.authUserId);
+      let likedMovies = await userRef.collection("likedMovies").get();
+      let matches = await userRef.collection("matches").get();
+      var likedMoviesArr = [];
+      var matchesArr = [];
+      await likedMovies.forEach(async function(doc) {
+        let movie = await doc.data();
+        likedMoviesArr.push(movie);
+      });
+      await matches.forEach(async function(doc) {
+        let movie = await doc.data();
+        matchesArr.push(movie);
+      });
+      if (this.partnerId) {
+        let partnerRef = db.collection("users").doc(this.partnerId);
+        let partnerLikedMovies = await partnerRef.collection("likedMovies").get();
+        var partnerLikedMoviesArr = [];
+        var partnerMatchesArr = [];
+        await partnerLikedMovies.forEach(async function(doc) {
+          let movieId = await doc.data().id;
+          partnerLikedMoviesArr.push(movieId);
+        });
+        await matches.forEach(async function(doc) {
+          let movie = await doc.data();
+          partnerMatchesArr.push(movie);
+        });
+
+        const foundMatches = likedMoviesArr.filter(element => partnerLikedMoviesArr.includes(element.id));
+        foundMatches.forEach(async el => {
+          var foundMatch = false;
+          var foundMatchPartner = false;
+          
+          for(var i=0;i<matchesArr.length;i++){
+            if(matchesArr[i].id == el.id){
+              foundMatch = true;
+              break;
+            }
+          }
+          for(var j=0;j<partnerMatchesArr.length;j++){
+              if(partnerMatchesArr[j].id == el.id){
+                  foundMatchPartner = true;
+                  break;
+              }
+          }
+          if(!foundMatch){
+              console.log('adding to user');
+              await userRef.collection("matches").add({ ...el });
+          }
+          if(!foundMatchPartner){
+              console.log('adding to partner');
+              await partnerRef.collection("matches").add({ ...el });
+          }
+          
+        });
+        
+        
+      }
+      this.incrementCurrentIndex();
+
+    },
     async fetchMovies(page, genre = "") {
       this.isLoading = true;
       const res = await axios.get(
