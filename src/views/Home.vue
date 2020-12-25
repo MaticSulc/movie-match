@@ -236,25 +236,11 @@ export default {
     },
     async thumbsUp() {
       let userRef = db.collection("users").doc(this.authUserId);
-
       await userRef.collection("likedMovies").add({ ...this.currentMovie });
-
-      if (this.partnerId) {
-        let partnerRef = db.collection("users").doc(this.partnerId);
-        const partnerLikedSnapshot = await partnerRef
-          .collection("likedMovies")
-          .where("id", "==", this.currentMovie.id)
-          .get();
-        if (!partnerLikedSnapshot.empty) {
-          await userRef.collection("matches").add({ ...this.currentMovie });
-          await partnerRef.collection("matches").add({ ...this.currentMovie });
-        }
-      }
       this.incrementCurrentIndex();
     },
     async thumbsDown() {
       let userRef = db.collection("users").doc(this.authUserId);
-
       await userRef.collection("dislikedMovies").add({ ...this.currentMovie });
       this.incrementCurrentIndex();
     },
