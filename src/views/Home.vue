@@ -197,6 +197,7 @@ export default {
         } else {
           this.currentMovie = this.movies[this.currentIndex];
           this.isLoading = false;
+          await this.getTrailerUrlRating();
         }
       }
     },
