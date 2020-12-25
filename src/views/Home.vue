@@ -4,7 +4,7 @@
       :loading="isLoading"
       class="mx-auto my-12"
       max-width="1000"
-      style="background-color: #BEBEBE"
+      style="background-color: #bebebe"
     >
       <template slot="progress">
         <v-progress-linear
@@ -19,9 +19,10 @@
         </v-col>
         <v-col md="6" class="">
           <v-card-title class="mb-n5"
-            >{{ currentMovie.title }} <span class="ml-1" v-if="this.currentMovie.release_date!=''"> ({{
-              currentMovie.release_date.split("-")[0]
-            }})</span></v-card-title
+            >{{ currentMovie.title }}
+            <span class="ml-1" v-if="this.currentMovie.release_date != ''">
+              ({{ currentMovie.release_date.split("-")[0] }})</span
+            ></v-card-title
           >
           <v-rating
             class="pl-2"
@@ -57,7 +58,8 @@
               </v-tooltip>
             </v-row>
           </v-card-actions>
-          <youtube v-if="this.trailerUrl!=''"
+          <youtube
+            v-if="this.trailerUrl != ''"
             class="ml-5 mt-3 mb-3"
             :player-width="490"
             :player-height="300"
@@ -84,7 +86,7 @@ export default {
     movieApiPage: 1,
     trailerUrl: "",
     rating: 0,
-    backdrop: ""
+    backdrop: "",
   }),
   created() {
     this.movieApiPage = 1;
@@ -96,76 +98,75 @@ export default {
     }
   },
   updated() {
-    this.syncMatches();
     this.getTrailerUrlRating();
+    this.syncMatches();
   },
   watch: {
     $route() {
       this.movieApiPage = 1;
       this.fetchMovies(this.movieApiPage, this.$route.query.genre);
-    }
+    },
   },
   methods: {
-    async syncMatches(){
-      let userRef = db.collection("users").doc(this.authUserId);
-      let likedMovies = await userRef.collection("likedMovies").get();
-      let matches = await userRef.collection("matches").get();
-      var likedMoviesArr = [];
-      var matchesArr = [];
-      await likedMovies.forEach(async function(doc) {
+    async syncMatches() {
+      let auserRef = db.collection("users").doc(this.authUserId);
+      let alikedMovies = await auserRef.collection("likedMovies").get();
+      let amatches = await auserRef.collection("matches").get();
+      let alikedMoviesArr = [];
+      let amatchesArr = [];
+      await alikedMovies.forEach(async function (doc) {
         let movie = await doc.data();
-        likedMoviesArr.push(movie);
+        alikedMoviesArr.push(movie);
       });
-      await matches.forEach(async function(doc) {
+      await amatches.forEach(async function (doc) {
         let movie = await doc.data();
-        matchesArr.push(movie);
+        amatchesArr.push(movie);
       });
       if (this.partnerId) {
-        let partnerRef = db.collection("users").doc(this.partnerId);
-        let partnerLikedMovies = await partnerRef.collection("likedMovies").get();
-        var partnerLikedMoviesArr = [];
-        var partnerMatchesArr = [];
-        await partnerLikedMovies.forEach(async function(doc) {
+        let apartnerRef = db.collection("users").doc(this.partnerId);
+        let apartnerLikedMovies = await apartnerRef
+          .collection("likedMovies")
+          .get();
+        let apartnerLikedMoviesArr = [];
+        let apartnerMatchesArr = [];
+        await apartnerLikedMovies.forEach(async function (doc) {
           let movieId = await doc.data().id;
-          partnerLikedMoviesArr.push(movieId);
+          apartnerLikedMoviesArr.push(movieId);
         });
-        await matches.forEach(async function(doc) {
+        await amatches.forEach(async function (doc) {
           let movie = await doc.data();
-          partnerMatchesArr.push(movie);
+          apartnerMatchesArr.push(movie);
         });
 
-        const foundMatches = likedMoviesArr.filter(element => partnerLikedMoviesArr.includes(element.id));
-        foundMatches.forEach(async el => {
-          var foundMatch = false;
-          var foundMatchPartner = false;
-          
-          for(var i=0;i<matchesArr.length;i++){
-            if(matchesArr[i].id == el.id){
+        const foundMatches = alikedMoviesArr.filter((element) =>
+          apartnerLikedMoviesArr.includes(element.id)
+        );
+        foundMatches.forEach(async (el) => {
+          let foundMatch = false;
+          let foundMatchPartner = false;
+
+          for (let i = 0; i < amatchesArr.length; i++) {
+            if (amatchesArr[i].id == el.id) {
               foundMatch = true;
               break;
             }
           }
-          for(var j=0;j<partnerMatchesArr.length;j++){
-              if(partnerMatchesArr[j].id == el.id){
-                  foundMatchPartner = true;
-                  break;
-              }
+          for (let j = 0; j < apartnerMatchesArr.length; j++) {
+            if (apartnerMatchesArr[j].id == el.id) {
+              foundMatchPartner = true;
+              break;
+            }
           }
-          if(!foundMatch){
-              console.log('adding to user');
-              await userRef.collection("matches").add({ ...el });
+          if (!foundMatch) {
+            console.log("adding to user");
+            await auserRef.collection("matches").add({ ...el });
           }
-          if(!foundMatchPartner){
-              console.log('adding to partner');
-              await partnerRef.collection("matches").add({ ...el });
+          if (!foundMatchPartner) {
+            console.log("adding to partner");
+            await apartnerRef.collection("matches").add({ ...el });
           }
-          
         });
-        
-        
       }
-      this.incrementCurrentIndex();
-
     },
     async fetchMovies(page, genre = "") {
       this.isLoading = true;
@@ -179,11 +180,11 @@ export default {
         let dislikedMovies = await userRef.collection("dislikedMovies").get();
         var likedMoviesArr = [];
         var dislikedMoviesArr = [];
-        await likedMovies.forEach(async function(doc) {
+        await likedMovies.forEach(async function (doc) {
           let movieId = await doc.data().id;
           likedMoviesArr.push(movieId);
         });
-        await dislikedMovies.forEach(async function(doc) {
+        await dislikedMovies.forEach(async function (doc) {
           let movieId = await doc.data().id;
           dislikedMoviesArr.push(movieId);
         });
@@ -209,11 +210,11 @@ export default {
       let dislikedMovies = await userRef.collection("dislikedMovies").get();
       var likedMoviesArr = [];
       var dislikedMoviesArr = [];
-      await likedMovies.forEach(async function(doc) {
+      await likedMovies.forEach(async function (doc) {
         let movieId = await doc.data().id;
         likedMoviesArr.push(movieId);
       });
-      await dislikedMovies.forEach(async function(doc) {
+      await dislikedMovies.forEach(async function (doc) {
         let movieId = await doc.data().id;
         dislikedMoviesArr.push(movieId);
       });
@@ -258,17 +259,19 @@ export default {
       this.incrementCurrentIndex();
     },
     async getTrailerUrlRating() {
-      movieTrailer(this.currentMovie.title, {id: true}).then(async (res) => {
-        this.trailerUrl = res;
-      }).catch(() => {
-        this.trailerUrl = '';
-      });
-      
+      movieTrailer(this.currentMovie.title, { id: true })
+        .then(async (res) => {
+          this.trailerUrl = res;
+        })
+        .catch(() => {
+          this.trailerUrl = "";
+        });
+
       let rating = this.currentMovie.vote_average;
       this.rating = rating / 2;
       this.backdrop =
         "https://image.tmdb.org/t/p/w500/" + this.currentMovie.backdrop_path;
-    }
+    },
   },
   computed: {
     movieResultsLength() {
@@ -284,7 +287,7 @@ export default {
       return this.currentMovie.poster_path
         ? `https://image.tmdb.org/t/p/w500/${this.currentMovie.poster_path}`
         : "";
-    }
-  }
+    },
+  },
 };
 </script>
