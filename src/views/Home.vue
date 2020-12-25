@@ -158,11 +158,9 @@ export default {
             }
           }
           if (!foundMatch) {
-            console.log("adding to user");
             await auserRef.collection("matches").add({ ...el });
           }
           if (!foundMatchPartner) {
-            console.log("adding to partner");
             await apartnerRef.collection("matches").add({ ...el });
           }
         });

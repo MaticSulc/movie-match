@@ -4,6 +4,9 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import firebase from "firebase/app";
+import 'firebase/auth';
+import 'firebase/analytics';
+import 'firebase/firestore';
 import VueYouTubeEmbed from "vue-youtube-embed";
 
 Vue.config.productionTip = false;
