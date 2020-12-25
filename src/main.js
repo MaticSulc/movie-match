@@ -3,7 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
-import firebase from "firebase/app";
+import firebase from "firebase";
 import VueYouTubeEmbed from "vue-youtube-embed";
 
 Vue.config.productionTip = false;
