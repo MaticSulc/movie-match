@@ -19,9 +19,9 @@
         </v-col>
         <v-col md="6" class="">
           <v-card-title class="mb-n5"
-            >{{ currentMovie.title }} ({{
+            >{{ currentMovie.title }} <span class="ml-1" v-if="this.currentMovie.release_date!=''"> ({{
               currentMovie.release_date.split("-")[0]
-            }})</v-card-title
+            }})</span></v-card-title
           >
           <v-rating
             class="pl-2"
@@ -57,12 +57,13 @@
               </v-tooltip>
             </v-row>
           </v-card-actions>
-          <youtube
+          <youtube v-if="this.trailerUrl!=''"
             class="ml-5 mt-3 mb-3"
             :player-width="490"
             :player-height="300"
             :video-id="trailerUrl"
           ></youtube>
+          <v-img v-else class="w-100 mt-5" :src="backdrop"></v-img>
         </v-col>
       </v-row>
     </v-card>
@@ -72,7 +73,6 @@
 <script>
 import { db } from "../main";
 import axios from "axios";
-import { getIdFromURL } from "vue-youtube-embed";
 const movieTrailer = require("movie-trailer");
 export default {
   name: "Home",
@@ -106,7 +106,6 @@ export default {
   },
   methods: {
     async fetchMovies(page, genre = "") {
-      console.log("fetchMovies " + this.isLoading);
       this.isLoading = true;
       const res = await axios.get(
         `https://api.themoviedb.org/3/discover/movie?api_key=e38f8031ec37d0ebadd751afc38a138e&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=false&page=${page}&with_genres=${genre}&append_to_response=videos`
@@ -197,9 +196,12 @@ export default {
       this.incrementCurrentIndex();
     },
     async getTrailerUrlRating() {
-      let url = movieTrailer(this.currentMovie.title);
-      let id = getIdFromURL(await url);
-      this.trailerUrl = id;
+      movieTrailer(this.currentMovie.title, {id: true}).then(async (res) => {
+        this.trailerUrl = res;
+      }).catch(() => {
+        this.trailerUrl = '';
+      });
+      
       let rating = this.currentMovie.vote_average;
       this.rating = rating / 2;
       this.backdrop =
