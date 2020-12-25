@@ -6,7 +6,8 @@
         backgroundImage: 'url(' + require('@/assets/bg_light.png') + ')',
         backgroundSize: 'cover',
         backgroundColor: '#282828	',
-        backgroundPosition: 'center'
+        backgroundPosition: 'center',
+        overflow: 'hidden',
       }"
     >
       <router-view></router-view>
@@ -23,7 +24,7 @@ export default {
   },
 
   components: {
-    AppBar
+    AppBar,
   },
 
   data: () => ({}),

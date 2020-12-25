@@ -6,14 +6,14 @@
         v-if="userId"
       ></v-app-bar-nav-icon>
 
-      <div class="d-flex align-center">
+      <div class="d-none d-sm-flex align-center">
         <router-link style="text-decoration: none; color: #fff" to="/"
-          ><h2>Movie Match</h2></router-link
+          ><h3>Movie Match</h3></router-link
         >
       </div>
 
       <v-spacer></v-spacer>
-      <v-btn v-if="userId" text href="mailto:matic.sulc1@student.um.si?subject=Bug Report - Movie Match">Report a bug</v-btn>
+      <v-btn v-if="userId" text href="mailto:matic.sulc1@student.um.si?subject=Support request - Movie Match">Support</v-btn>
       <v-btn v-if="userId" @click="logoutUser" text>Logout</v-btn>
     </v-app-bar>
     <v-navigation-drawer

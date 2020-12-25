@@ -14,18 +14,18 @@
         ></v-progress-linear>
       </template>
       <v-row v-if="!isLoading">
-        <v-col md="5" class="ml-3">
-          <v-img style="height: 100%" :src="movieImage"></v-img>
+        <v-col md="5">
+          <v-img class="d-block mt-0 mb-0 ml-auto mr-auto" style="width: 90%;" :src="movieImage"></v-img>
         </v-col>
-        <v-col md="6" class="">
-          <v-card-title class="mb-n5"
+        <v-col md="6" class="p-0">
+          <v-card-title class="mb-n5 justify-md-start justify-center"
             >{{ currentMovie.title }}
             <span class="ml-1" v-if="this.currentMovie.release_date != ''">
               ({{ currentMovie.release_date.split("-")[0] }})</span
             ></v-card-title
           >
           <v-rating
-            class="pl-2"
+            class="pl-2 text-center text-md-left"
             v-model="rating"
             background-color="gray lighten-2"
             color="gray lighten-2"
@@ -58,14 +58,10 @@
               </v-tooltip>
             </v-row>
           </v-card-actions>
-          <youtube
-            v-if="this.trailerUrl != ''"
-            class="ml-5 mt-3 mb-3"
-            :player-width="490"
-            :player-height="300"
-            :video-id="trailerUrl"
-          ></youtube>
-          <v-img v-else class="w-100 mt-5" :src="backdrop"></v-img>
+          <Youtube v-if="this.trailerUrl != ''" class="ml-lg-5 " :videoId="trailerUrl" maxWidth="500px" />
+          <v-img v-else class="ml-5 mr-5 mt-5" :src="backdrop"></v-img>
+          
+
         </v-col>
       </v-row>
     </v-card>
@@ -75,9 +71,13 @@
 <script>
 import { db } from "../main";
 import axios from "axios";
+import Youtube from "../components/Youtube"
 const movieTrailer = require("movie-trailer");
 export default {
   name: "Home",
+    components: {
+    Youtube,
+  },
   data: () => ({
     isLoading: false,
     movies: [],
