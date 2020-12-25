@@ -10,7 +10,7 @@
     <v-container>
       <v-row>
         <v-col md="6">
-          <v-card class="mx-auto">
+          <v-card class="mx-auto" color="rgb(255,255,255,0.9)">
             <v-container>
               <h2>User settings</h2>
               <v-row>

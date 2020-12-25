@@ -8,7 +8,7 @@
       ></v-progress-circular>
     </v-overlay>
     <v-container>
-      <v-card>
+      <v-card color="rgb(255,255,255,0.9)">
         <v-container>
           <h2>Partner Search</h2>
           <p>Search for your partner by e-mail.</p>

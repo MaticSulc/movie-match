@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col md="6" v-for="movie in likedMovies" :key="movie.id">
-        <v-card class="mx-auto">
+        <v-card class="mx-auto" color="rgb(255,255,255,0.9)">
           <v-container>
             <v-row>
               <v-col md="8">

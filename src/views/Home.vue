@@ -98,7 +98,6 @@ export default {
     }
   },
   updated() {
-    this.getTrailerUrlRating();
     this.syncMatches();
   },
   watch: {
@@ -230,6 +229,7 @@ export default {
         (await likedMoviesArr.includes(this.currentMovie.id)) ||
         (await dislikedMoviesArr.includes(this.currentMovie.id))
       );
+      await this.getTrailerUrlRating();
       this.isLoading = false;
     },
     async thumbsUp() {
@@ -243,7 +243,7 @@ export default {
       this.incrementCurrentIndex();
     },
     async getTrailerUrlRating() {
-      movieTrailer(this.currentMovie.title, { id: true })
+      await movieTrailer(this.currentMovie.title, { id: true })
         .then(async (res) => {
           this.trailerUrl = res;
         })
