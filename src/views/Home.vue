@@ -21,7 +21,7 @@
           <v-card-title class="mb-n5 justify-md-start justify-center"
             >{{ currentMovie.title }}
             <span class="ml-1" v-if="this.currentMovie.release_date != ''">
-              ({{ currentMovie.release_date.split("-")[0] }})</span
+              ({{ currentMovie.release_date }})</span
             ></v-card-title
           >
           <v-rating
