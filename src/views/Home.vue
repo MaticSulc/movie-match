@@ -13,8 +13,8 @@
           indeterminate
         ></v-progress-linear>
       </template>
-      <v-row v-if="!isLoading">
-        <v-col md="5">
+      <v-row v-if="!isLoading" align="center">
+        <v-col md="5" >
           <v-img class="d-block mt-0 mb-0 ml-auto mr-auto" style="width: 90%;" :src="movieImage"></v-img>
         </v-col>
         <v-col md="6" class="p-0">
