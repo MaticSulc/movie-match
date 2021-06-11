@@ -13,7 +13,7 @@
       </div>
 
       <v-spacer></v-spacer>
-      <v-btn v-if="userId" text href="mailto:matic.sulc1@student.um.si?subject=Support request - Movie Match">Support</v-btn>
+      <v-btn v-if="userId" text href="mailto:matic.sulc1@student.um.si?subject=Support request - Movie Match">Contact</v-btn>
       <v-btn v-if="userId" @click="logoutUser" text>Logout</v-btn>
     </v-app-bar>
     <v-navigation-drawer
